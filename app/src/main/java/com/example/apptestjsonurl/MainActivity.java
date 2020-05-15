@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,15 +25,28 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TextView tvDados;
+    private Button btUpdate;
+
+    private int cont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        cont = 0;
         tvDados = (TextView) findViewById(R.id.tvDados);
+        btUpdate = (Button) findViewById((R.id.btUpdate));
 
-        new DownloadJsonAsyncTask().execute("https://api.hgbrasil.com/weather?array_limit=3&fields=only_results,humidity,temp,city_name,forecast,condition,weekday,max,min,date&key=bdda2060&lat=-8.114&log=-35.017&user_ip=remote");
+        btUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //realiza a busca das informações do clima na cidade de Jaboatão dos Guararapes - PE
+                new DownloadJsonAsyncTask().execute("https://api.hgbrasil.com/weather?array_limit=3&fields=only_results,humidity,temp,city_name,forecast,condition,weekday,max,min,date&key=bdda2060&lat=-8.114&log=-35.017&user_ip=remote");
+                cont++;
+                tvDados.setText("Contagem: "+cont+"\n" + tvDados.getText());
+            }
+        });
     }
 
     private class DownloadJsonAsyncTask extends AsyncTask<String, Void, Clima> {
