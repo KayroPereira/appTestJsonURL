@@ -20,6 +20,7 @@ public class DownloadJsonAsyncTask extends AsyncTask<String, Void, Clima> {
 
     public interface AsyncResponseJson {
         void processFinish(Clima result);
+        void processStart();
     }
 
     public AsyncResponseJson delegate = null;
@@ -32,6 +33,7 @@ public class DownloadJsonAsyncTask extends AsyncTask<String, Void, Clima> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        delegate.processStart();
         //dialog = ProgressDialog.show(MainActivity.this, "Aguarde", "Fazendo download do JSON");
     }
 

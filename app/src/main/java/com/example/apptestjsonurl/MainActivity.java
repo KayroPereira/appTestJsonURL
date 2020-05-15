@@ -1,5 +1,6 @@
 package com.example.apptestjsonurl;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateClima(){
         //realiza a busca das informações do clima na cidade de Jaboatão dos Guararapes - PE
         DownloadJsonAsyncTask downloadJson = new DownloadJsonAsyncTask(new DownloadJsonAsyncTask.AsyncResponseJson() {
+            ProgressDialog dialog;
             @Override
             public void processFinish(Clima result) {
                 if (result != null ) {
@@ -57,7 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     tvDados.setText("Contagem: " + cont + "\n\n" + "Erro ao obter os dados");
                 }
+                dialog.dismiss();
             }
+
+            @Override
+            public void processStart() {
+                dialog = ProgressDialog.show(MainActivity.this, "Aguarde", "Fazendo download do JSON");
+            }
+
         });
         downloadJson.execute("https://api.hgbrasil.com/weather?array_limit=3&fields=only_results,humidity,temp,city_name,forecast,condition,weekday,max,min,date&key=bdda2060&lat=-8.114&log=-35.017&user_ip=remote");
     }
